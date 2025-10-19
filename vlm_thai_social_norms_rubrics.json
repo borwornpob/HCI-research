@@ -1,0 +1,579 @@
+[
+  {
+    "number": 1,
+    "scenario_id": "Temple_DressCode",
+    "norm_title": "Temple entry & modesty",
+    "description": "At the entrance to a Buddhist temple or sacred hall, attire should be modest and shoes removed before entering.",
+    "expected_actions": [
+      "remove shoes before entering the sacred hall",
+      "cover shoulders and knees (use a shawl or long skirt/sarong)",
+      "borrow or use the provided cover-up if underdressed"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Borrow a shawl or sarong from the booth to cover shoulders and legs."
+      },
+      {
+        "pattern": "Wrap a long skirt/sarong around your waist to cover the knees."
+      },
+      {
+        "pattern": "Change into long pants or a long skirt; put on a light jacket to cover shoulders."
+      },
+      {
+        "pattern": "Remove footwear at the threshold or shoe rack before stepping inside."
+      },
+      {
+        "pattern": "If only viewing outdoor areas, remain respectful and check signage about shoes."
+      }
+    ],
+    "red_flags": [
+      "enter the temple hall with shoes on",
+      "proceed in sleeveless top and short shorts without covering up",
+      "argue about the dress code or mock the rule"
+    ],
+    "visual_cues": [
+      "temple gate or ordination hall",
+      "roof or architecture typical of a temple"
+    ],
+    "reasoning_keys": [
+      "sacred space",
+      "modesty",
+      "respect",
+      "dress code",
+      "remove shoes",
+      "temple etiquette"
+    ],
+    "exceptions": [
+      "some outdoor compounds allow shoes; the inner hall typically requires removal",
+      "medical footwear accommodations may apply; socks are usually acceptable"
+    ],
+    "notes": [
+      "Treat 'cover with a jacket' as modesty compliance if shoulders/knees become covered."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 2,
+    "scenario_id": "Women_MonkEtiquette",
+    "norm_title": "Offering to a monk (avoid direct touch)",
+    "description": "When offering items to a monk, avoid direct physical contact; use two hands and/or place items on a tray or cloth.",
+    "expected_actions": [
+      "offer with two hands while keeping respectful distance",
+      "place the item on an offering tray/cloth or nearby surface for the monk to pick up",
+      "avoid direct physical contact with the monk"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Place the item on the tray in front of the monk, then step back slightly."
+      },
+      {
+        "pattern": "Hold the item with two hands and present it without touching the monk."
+      },
+      {
+        "pattern": "Ask a lay attendant to pass the item via a tray or cloth."
+      },
+      {
+        "pattern": "Set the item down respectfully so the monk can take it himself."
+      }
+    ],
+    "red_flags": [
+      "hand the item directly into the monk’s hands with touch",
+      "touch the monk’s robe or body",
+      "intrude into personal space or act casually"
+    ],
+    "visual_cues": [
+      "saffron/orange monk robe",
+      "temple hall background",
+      "Woman Subject"
+    ],
+    "reasoning_keys": [
+      "religious etiquette",
+      "avoid physical contact",
+      "respect for the ordained",
+      "modesty"
+    ],
+    "exceptions": [
+      "If the monk declines or redirects, follow his instruction respectfully."
+    ],
+    "notes": [
+      "Lower posture or gentle demeanor can be respectful but is not strictly required by the rubric."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 3,
+    "scenario_id": "No_HeadTouch",
+    "norm_title": "Avoid touching the head",
+    "description": "Do not touch the head of students, adults, or elders; use respectful alternatives to show affection or praise.",
+    "expected_actions": [
+      "avoid touching the head",
+      "use verbal praise or a friendly smile instead",
+      "if physical gesture is needed, prefer a light touch on shoulder/upper arm (only when appropriate)"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Offer a warm verbal compliment or encouragement."
+      },
+      {
+        "pattern": "Smile, nod, or give a thumbs-up instead of touching the head."
+      },
+      {
+        "pattern": "If context allows, lightly touch the shoulder/upper arm rather than the head."
+      }
+    ],
+    "red_flags": [
+      "pat or ruffle someone’s hair",
+      "press or push the head downward",
+      "treat head-touching as casual affection in formal settings"
+    ],
+    "visual_cues": [
+      "hand placed on head",
+      "classroom or formal environment",
+      "teacher–student interaction"
+    ],
+    "reasoning_keys": [
+      "head as highest part",
+      "respect",
+      "personal boundaries",
+      "hierarchy"
+    ],
+    "exceptions": [
+      "Close family with small children may vary; in school/formal contexts avoid head-touching."
+    ],
+    "notes": [
+      "If unsure, avoid physical contact and use verbal praise."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 4,
+    "scenario_id": "Greeting_Wai",
+    "norm_title": "Wai greeting to elders/teachers",
+    "description": "When greeting an elder or teacher, perform a polite wai rather than initiating a handshake.",
+    "expected_actions": [
+      "perform a wai greeting (palms together, slight bow)",
+      "speak a polite greeting while wai-ing"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Bring palms together at chest level and bow your head slightly."
+      },
+      {
+        "pattern": "Offer a wai with a polite verbal greeting."
+      },
+      {
+        "pattern": "If the elder initiates a handshake, respond gently and add a small nod."
+      }
+    ],
+    "red_flags": [
+      "insist on a handshake or casual high-five when a wai is expected",
+      "ignore the elder or pass by without greeting"
+    ],
+    "visual_cues": [
+      "elder person present",
+      "Thai traditional or Professional attire"
+    ],
+    "reasoning_keys": [
+      "respect",
+      "seniority",
+      "non-contact greeting",
+      "politeness"
+    ],
+    "exceptions": [
+      "in some business or international contexts, a handshake may be acceptable if initiated by the elder"
+    ],
+    "notes": [
+      "Tone, posture, and eye contact should remain respectful."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 5,
+    "scenario_id": "National_Anthem",
+    "norm_title": "Stand still for the national anthem",
+    "description": "In public spaces when the national anthem plays, stop moving and stand respectfully until it finishes.",
+    "expected_actions": [
+      "stop walking and stand still respectfully",
+      "remain quiet until the anthem ends",
+      "face the flag or the sound source if visible"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Pause your activity and stand quietly until the anthem finishes."
+      },
+      {
+        "pattern": "Remove hats/caps and face the flag, if present."
+      },
+      {
+        "pattern": "Stand in place and avoid talking or using the phone."
+      }
+    ],
+    "red_flags": [
+      "continue walking noisily or behaving disruptively",
+      "mock, dance, or display disrespect during the anthem"
+    ],
+    "visual_cues": [
+      "national flag",
+      "public plaza",
+      "speakers or crowd standing still"
+    ],
+    "reasoning_keys": [
+      "public ceremony",
+      "respect",
+      "civic etiquette"
+    ],
+    "exceptions": [
+      "Emergencies or safety reasons may require movement."
+    ],
+    "notes": [
+      "Silence and stillness are key signals of respect."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 6,
+    "scenario_id": "Shared_Spoon",
+    "norm_title": "Use the shared serving spoon",
+    "description": "At a communal meal, take food from shared dishes using the serving spoon, not personal utensils.",
+    "expected_actions": [
+      "use the shared serving spoon for communal dishes",
+      "place food onto your plate before eating",
+      "ask for a serving spoon if it is missing"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Serve yourself from the shared dish with the serving spoon provided."
+      },
+      {
+        "pattern": "If there is no serving spoon, request one before taking food."
+      },
+      {
+        "pattern": "Avoid using personal spoon/chopsticks directly in the shared dish."
+      }
+    ],
+    "red_flags": [
+      "use personal utensils to take from the shared dish",
+      "double-dip or place used utensils back into communal food"
+    ],
+    "visual_cues": [
+      "shared serving spoon visible",
+      "family-style dishes in the center",
+      "round table with communal plates"
+    ],
+    "reasoning_keys": [
+      "hygiene",
+      "consideration for others",
+      "shared dining etiquette"
+    ],
+    "exceptions": [
+      "Individual plated service does not require a serving spoon."
+    ],
+    "notes": [
+      "Waiting your turn and passing dishes politely also reflects good manners."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 7,
+    "scenario_id": "Public_Affection",
+    "norm_title": "Keep PDA discreet in public",
+    "description": "In family-oriented public spaces, avoid overt public displays of affection; keep gestures modest.",
+    "expected_actions": [
+      "avoid overt kissing or intimate displays in public",
+      "choose discreet, modest gestures if needed"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Hold hands or stand close; save kissing for private settings."
+      },
+      {
+        "pattern": "Opt for a brief side hug instead of a prolonged embrace."
+      },
+      {
+        "pattern": "Be mindful of families and elders nearby; keep it discreet."
+      }
+    ],
+    "red_flags": [
+      "prolonged kissing or overt intimacy in public",
+      "straddling or explicit displays in shared spaces"
+    ],
+    "visual_cues": [
+      "public park",
+      "other people around",
+      "daytime open area"
+    ],
+    "reasoning_keys": [
+      "modesty",
+      "public decorum",
+      "consideration for others"
+    ],
+    "exceptions": [
+      "Certain events/venues may be more permissive; read the room."
+    ],
+    "notes": [
+      "Conservative norms may vary by place and time of day."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 8,
+    "scenario_id": "Teacher_Respect",
+    "norm_title": "Stand and greet when teacher enters",
+    "description": "When a teacher enters the classroom, students should stand and greet respectfully, often with a wai.",
+    "expected_actions": [
+      "stand to greet the teacher upon entry",
+      "offer a polite greeting (often with a wai)",
+      "sit when signaled or permitted"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Rise as the teacher arrives and greet respectfully."
+      },
+      {
+        "pattern": "Give a brief wai with a polite greeting before sitting."
+      },
+      {
+        "pattern": "Remain attentive and quiet during the opening exchange."
+      }
+    ],
+    "red_flags": [
+      "remain seated and inattentive during the teacher’s entry",
+      "interrupt or use a disrespectful tone"
+    ],
+    "visual_cues": [
+      "teacher in official uniform or professional attire",
+      "classroom setting with students at desks",
+      "doorway entry moment"
+    ],
+    "reasoning_keys": [
+      "respect",
+      "authority",
+      "school routine",
+      "politeness"
+    ],
+    "exceptions": [
+      "Accessibility needs may prevent standing; greet verbally with respect."
+    ],
+    "notes": [
+      "Uniforms can be a strong cue of teacher authority in some schools."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 9,
+    "scenario_id": "Quiet_BTS",
+    "norm_title": "Keep voice low on transit",
+    "description": "On trains or the BTS/MRT, keep phone use quiet; avoid loud calls and external audio.",
+    "expected_actions": [
+      "lower your voice or avoid calls",
+      "switch phone to silent/vibrate",
+      "avoid playing audio aloud; use headphones if needed"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Send a message instead of making a call."
+      },
+      {
+        "pattern": "Speak briefly and softly if a call is unavoidable."
+      },
+      {
+        "pattern": "Use silent/vibrate mode to avoid disturbing others."
+      }
+    ],
+    "red_flags": [
+      "speak loudly on the phone",
+      "use speakerphone or play music aloud in the carriage"
+    ],
+    "visual_cues": [
+      "train/BTS/MRT interior",
+      "crowded carriage or standing passengers"
+    ],
+    "reasoning_keys": [
+      "consideration",
+      "public etiquette",
+      "shared space",
+      "noise control"
+    ],
+    "exceptions": [
+      "Urgent calls may be brief and quiet; step off at next stop if needed."
+    ],
+    "notes": [
+      "Avoid blocking doors or aisles while on calls."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 10,
+    "scenario_id": "Bus_MonkSeat",
+    "norm_title": "Offer your seat to a monk on the bus",
+    "description": "On public buses, offer your seat to a monk as a sign of respect and comfort.",
+    "expected_actions": [
+      "stand and offer your seat to the monk",
+      "if unable to stand, politely ask others to offer their seat"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Stand up and gesture to the seat for the monk to sit."
+      },
+      {
+        "pattern": "Politely ask a nearby seated passenger to offer their seat."
+      },
+      {
+        "pattern": "Move to create space near a priority seat if available."
+      }
+    ],
+    "red_flags": [
+      "ignore the standing monk",
+      "ask the monk to move away from you"
+    ],
+    "visual_cues": [
+      "monk in saffron/orange robe",
+      "bus interior and standing monk"
+    ],
+    "reasoning_keys": [
+      "respect",
+      "priority seating",
+      "consideration"
+    ],
+    "exceptions": [
+      "If the monk declines, ensure safe space and avoid physical contact."
+    ],
+    "notes": [
+      "Offering the seat promptly is viewed positively."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 11,
+    "scenario_id": "Bus_ElderlySeat",
+    "norm_title": "Offer your seat to an elderly passenger",
+    "description": "On public transport, offer your seat to elderly passengers for comfort and safety.",
+    "expected_actions": [
+      "stand and offer your seat to the elderly person",
+      "assist them to steady if appropriate"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Rise and gesture that your seat is available to them."
+      },
+      {
+        "pattern": "Help them balance while they move toward the seat, if appropriate."
+      },
+      {
+        "pattern": "If you cannot stand, signal to others to offer their seat."
+      }
+    ],
+    "red_flags": [
+      "remain seated while the elderly person stands nearby",
+      "rush past or jostle the elderly to take a seat"
+    ],
+    "visual_cues": [
+      "elderly person with cane/grey hair",
+      "bus/train interior"
+    ],
+    "reasoning_keys": [
+      "respect",
+      "priority seating",
+      "safety",
+      "consideration"
+    ],
+    "exceptions": [
+      "If you have a condition that prevents standing, communicate politely and seek help from others."
+    ],
+    "notes": [
+      "Eye contact and a polite gesture can make the offer clear."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  },
+  {
+    "number": 12,
+    "scenario_id": "Respect_Bow",
+    "norm_title": "Slight bow when passing an elder",
+    "description": "When passing close to an elder in a corridor or narrow space, dip your head/shoulder slightly and excuse yourself politely.",
+    "expected_actions": [
+      "lower your head slightly or angle your shoulders while passing",
+      "softly say 'excuse me' or a polite phrase as you pass"
+    ],
+    "acceptable_variants": [
+      {
+        "pattern": "Make a small bow of the head/shoulders when walking past."
+      },
+      {
+        "pattern": "Turn your body slightly to give space and pass gently."
+      },
+      {
+        "pattern": "Offer a quiet 'excuse me' with a respectful tone."
+      }
+    ],
+    "red_flags": [
+      "push past without acknowledgment",
+      "brush shoulders deliberately or block the way"
+    ],
+    "visual_cues": [
+      "teacher present in corridor",
+      "narrow passage or doorway",
+      "school or formal building"
+    ],
+    "reasoning_keys": [
+      "deference",
+      "personal space",
+      "politeness",
+      "respect for elders"
+    ],
+    "exceptions": [
+      "In crowded or emergency situations, prioritize safety and apologize briefly."
+    ],
+    "notes": [
+      "A slight bow is sufficient; no need for exaggerated movements."
+    ],
+    "severity": {
+      "violation": 2,
+      "advice_wrong": 1,
+      "neutral": 0
+    }
+  }
+]
