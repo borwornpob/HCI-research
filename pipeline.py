@@ -1,4 +1,5 @@
 """Pipeline to run scenario QA through OpenRouter inference and judge models."""
+
 from __future__ import annotations
 
 import argparse
@@ -30,6 +31,7 @@ except ImportError:  # pragma: no cover - dependency not installed yet
 
 
 # ---------------------------- Data Structures ---------------------------------
+
 
 @dataclass
 class Scenario:
@@ -69,6 +71,7 @@ T = TypeVar("T")
 
 
 # ----------------------------- Utilities ---------------------------------------
+
 
 def load_text(path: Path) -> str:
     try:
@@ -124,9 +127,9 @@ def read_image_bytes_without_metadata(path: Path) -> bytes:
             img_no_metadata.save(output, **save_kwargs)
         else:
             # Convert other formats (e.g., WebP) to PNG to ensure metadata removal
-            img_no_metadata.convert("RGBA" if img_no_metadata.mode == "P" else "RGB").save(
-                output, format="PNG", optimize=True
-            )
+            img_no_metadata.convert(
+                "RGBA" if img_no_metadata.mode == "P" else "RGB"
+            ).save(output, format="PNG", optimize=True)
         return output.getvalue()
 
 
@@ -143,7 +146,9 @@ def encode_image(path: Path) -> Dict[str, object]:
 def find_scenario_images(images_root: Path, scenario: Scenario) -> List[Path]:
     folder = images_root / scenario.prefixed_folder
     if not folder.exists():
-        raise SystemExit(f"Image folder not found for scenario {scenario.number}: {folder}")
+        raise SystemExit(
+            f"Image folder not found for scenario {scenario.number}: {folder}"
+        )
     candidates = sorted(folder.glob(f"{scenario.number:02d}_*.png"))
     if len(candidates) < 2:
         raise SystemExit(
@@ -177,19 +182,31 @@ def is_retryable_error(error: Exception) -> bool:
             return True
         body = getattr(response, "body", None)
         if isinstance(body, dict):
-            code = body.get("error", {}).get("code") if isinstance(body.get("error"), dict) else body.get("code")
+            code = (
+                body.get("error", {}).get("code")
+                if isinstance(body.get("error"), dict)
+                else body.get("code")
+            )
             if isinstance(code, int) and code in RETRYABLE_STATUS_CODES:
                 return True
-            if isinstance(code, str) and code.isdigit() and int(code) in RETRYABLE_STATUS_CODES:
+            if (
+                isinstance(code, str)
+                and code.isdigit()
+                and int(code) in RETRYABLE_STATUS_CODES
+            ):
                 return True
     # String fallback
     message = str(error)
-    if any(token in message for token in ("429", "rate limit", "temporarily rate-limited")):
+    if any(
+        token in message for token in ("429", "rate limit", "temporarily rate-limited")
+    ):
         return True
     return False
 
 
-def request_with_retry(callable_fn: Callable[[], T], retry_config: RetryConfig, label: str) -> T:
+def request_with_retry(
+    callable_fn: Callable[[], T], retry_config: RetryConfig, label: str
+) -> T:
     max_attempts = max(retry_config.max_attempts, 1)
     base_delay = max(retry_config.initial_delay, 0.1)
     for attempt in range(max_attempts):
@@ -211,6 +228,7 @@ def request_with_retry(callable_fn: Callable[[], T], retry_config: RetryConfig, 
 
 # ----------------------------- OpenRouter Client -------------------------------
 
+
 class OpenRouterClient:
     def __init__(
         self,
@@ -225,7 +243,9 @@ class OpenRouterClient:
             raise SystemExit(
                 "The 'openai' package is required. Install with `pip install openai`."
             )
-        self._client = OpenAI(base_url=base_url, api_key=api_key, timeout=request_timeout)
+        self._client = OpenAI(
+            base_url=base_url, api_key=api_key, timeout=request_timeout
+        )
         self._referer = referer
         self._app_title = app_title
 
@@ -247,7 +267,9 @@ class OpenRouterClient:
         **kwargs,
     ) -> Dict[str, object]:
         kwargs = self._inject_headers(kwargs)
-        completion = self._client.chat.completions.create(model=model, messages=messages, **kwargs)
+        completion = self._client.chat.completions.create(
+            model=model, messages=messages, **kwargs
+        )
         if hasattr(completion, "model_dump"):
             return completion.model_dump()
         if isinstance(completion, dict):
@@ -256,15 +278,15 @@ class OpenRouterClient:
             try:
                 return json.loads(completion)
             except json.JSONDecodeError as exc:  # pragma: no cover - unexpected shape
-                raise ValueError(f"Unexpected string response: {completion[:200]}") from exc
+                raise ValueError(
+                    f"Unexpected string response: {completion[:200]}"
+                ) from exc
         raise TypeError(
             f"Unsupported response type from OpenRouter client: {type(completion)!r}"
         )
 
 
-def build_messages(
-    system_prompt: str, user_content: object
-) -> List[Dict[str, object]]:
+def build_messages(system_prompt: str, user_content: object) -> List[Dict[str, object]]:
     messages: List[Dict[str, object]] = []
     messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": user_content})
@@ -338,7 +360,9 @@ def call_inference(
     if max_output_tokens is not None:
         kwargs["max_tokens"] = max_output_tokens
     response_payload = request_with_retry(
-        lambda: client.chat_completions_create(model=model, messages=messages, **kwargs),
+        lambda: client.chat_completions_create(
+            model=model, messages=messages, **kwargs
+        ),
         retry_config=retry_config,
         label="inference",
     )
@@ -346,8 +370,37 @@ def call_inference(
     return InferenceResult(text=answer_text, raw_response=response_payload)
 
 
+def call_inference_multiple(
+    client: OpenRouterClient,
+    *,
+    model: str,
+    system_prompt: str,
+    question: str,
+    image_paths: Optional[Iterable[Path]] = None,
+    max_output_tokens: Optional[int] = None,
+    retry_config: RetryConfig,
+    num_inferences: int = 20,
+) -> List[InferenceResult]:
+    """Call inference model multiple times with the same input."""
+    results: List[InferenceResult] = []
+    for i in range(num_inferences):
+        result = call_inference(
+            client,
+            model=model,
+            system_prompt=system_prompt,
+            question=question,
+            image_paths=image_paths,
+            max_output_tokens=max_output_tokens,
+            retry_config=retry_config,
+        )
+        results.append(result)
+    return results
+
+
 def build_rubric_payload(scenario: Scenario) -> Dict[str, object]:
-    expected_actions = [item.strip() for item in scenario.expected_en.split(",") if item.strip()]
+    expected_actions = [
+        item.strip() for item in scenario.expected_en.split(",") if item.strip()
+    ]
     acceptable_variants = expected_actions  # placeholder fallback
     return {
         "number": scenario.number,
@@ -387,7 +440,9 @@ def call_judge(
     if max_output_tokens is not None:
         kwargs["max_tokens"] = max_output_tokens
     response_payload = request_with_retry(
-        lambda: client.chat_completions_create(model=model, messages=messages, **kwargs),
+        lambda: client.chat_completions_create(
+            model=model, messages=messages, **kwargs
+        ),
         retry_config=retry_config,
         label="judge",
     )
@@ -396,35 +451,99 @@ def call_judge(
         verdict = parse_json_response(output_text)
     except (json.JSONDecodeError, ValueError) as exc:
         raise ValueError(
-            "Judge model did not return valid JSON. Received:\n"
-            f"{output_text}"
+            f"Judge model did not return valid JSON. Received:\n{output_text}"
+        ) from exc
+    return JudgeResult(verdict=verdict, raw_response=response_payload)
+
+
+def call_judge_multiple_answers(
+    client: OpenRouterClient,
+    *,
+    model: str,
+    system_prompt: str,
+    question: str,
+    answers: List[str],
+    rubric: Dict[str, object],
+    max_output_tokens: Optional[int] = None,
+    retry_config: RetryConfig,
+) -> JudgeResult:
+    """Call judge model with multiple inference answers."""
+    payload = {
+        "question": question,
+        "answers": answers,  # Changed from "answer" to "answers" (list)
+        "rubric": rubric,
+    }
+    user_content = json.dumps(payload, ensure_ascii=False)
+    messages = build_messages(system_prompt, user_content)
+    kwargs = {}
+    if max_output_tokens is not None:
+        kwargs["max_tokens"] = max_output_tokens
+    response_payload = request_with_retry(
+        lambda: client.chat_completions_create(
+            model=model, messages=messages, **kwargs
+        ),
+        retry_config=retry_config,
+        label="judge",
+    )
+    output_text = extract_output_text(response_payload)
+    try:
+        verdict = parse_json_response(output_text)
+    except (json.JSONDecodeError, ValueError) as exc:
+        raise ValueError(
+            f"Judge model did not return valid JSON. Received:\n{output_text}"
         ) from exc
     return JudgeResult(verdict=verdict, raw_response=response_payload)
 
 
 # ----------------------------- CSV persistence ---------------------------------
 
-RESULT_HEADER = [
-    "number",
-    "scenario_id",
-    "language",
-    "image_file",
-    "question",
-    "inference_answer",
-    "judge_C0_final_action_or_verdict_correct",
-    "judge_C1_cultural_correctness_in_thought_process",
-    "judge_C2_presence_of_cultural_reasoning",
-    "judge_D1_visual_grounding",
-    "judge_D2_overclaiming",
-    "judge_D3_politeness_nonstereotype",
-    "judge_D4_clarity_usefulness",
-    "judge_rationale0",
-    "judge_rationale1",
-    "judge_rationale2",
-    "judge_flags",
-    "inference_raw",
-    "judge_raw",
-]
+# Maximum number of inferences supported in CSV schema
+MAX_INFERENCES = 20
+
+
+# Build header dynamically
+def build_result_header(num_inferences: int = MAX_INFERENCES) -> list:
+    header = [
+        "number",
+        "scenario_id",
+        "language",
+        "image_file",
+        "question",
+    ]
+
+    # Add inference answer columns
+    for i in range(1, num_inferences + 1):
+        header.append(f"inference_answer_{i}")
+
+    # Add judge result columns for each inference
+    for i in range(1, num_inferences + 1):
+        header.extend(
+            [
+                f"judge_{i}_C0_final_action_or_verdict_correct",
+                f"judge_{i}_C1_cultural_correctness_in_thought_process",
+                f"judge_{i}_C2_presence_of_cultural_reasoning",
+                f"judge_{i}_D1_visual_grounding",
+                f"judge_{i}_D2_overclaiming",
+                f"judge_{i}_D3_politeness_nonstereotype",
+                f"judge_{i}_D4_clarity_usefulness",
+                f"judge_{i}_rationale0",
+                f"judge_{i}_rationale1",
+                f"judge_{i}_rationale2",
+                f"judge_{i}_flags",
+            ]
+        )
+
+    # Add raw response columns
+    for i in range(1, num_inferences + 1):
+        header.append(f"inference_raw_{i}")
+
+    for i in range(1, num_inferences + 1):
+        header.append(f"judge_raw_{i}")
+
+    return header
+
+
+RESULT_HEADER = build_result_header(MAX_INFERENCES)
 
 
 class CsvResultWriter:
@@ -452,35 +571,58 @@ def result_row(
     language: str,
     image_file: str,
     question: str,
-    inference: InferenceResult,
-    judge: JudgeResult,
+    inferences: List[InferenceResult],
+    judges: List[JudgeResult],
 ) -> Dict[str, object]:
-    verdict = judge.verdict
-    return {
+    row = {
         "number": scenario.number,
         "scenario_id": scenario.folder_name,
         "language": language,
         "image_file": image_file,
         "question": question,
-        "inference_answer": inference.text,
-        "judge_C0_final_action_or_verdict_correct": verdict.get("C0_final_action_or_verdict_correct"),
-        "judge_C1_cultural_correctness_in_thought_process": verdict.get(
+    }
+
+    # Add all inference answers
+    for i, inference in enumerate(inferences, start=1):
+        row[f"inference_answer_{i}"] = inference.text
+
+    # Add all judge scores (one per inference)
+    for i, judge in enumerate(judges, start=1):
+        verdict = judge.verdict
+        row[f"judge_{i}_C0_final_action_or_verdict_correct"] = verdict.get(
+            "C0_final_action_or_verdict_correct"
+        )
+        row[f"judge_{i}_C1_cultural_correctness_in_thought_process"] = verdict.get(
             "C1_cultural_correctness_in_thought_process"
-        ),
-        "judge_C2_presence_of_cultural_reasoning": verdict.get(
+        )
+        row[f"judge_{i}_C2_presence_of_cultural_reasoning"] = verdict.get(
             "C2_presence_of_cultural_reasoning"
-        ),
-        "judge_D1_visual_grounding": verdict.get("D1_visual_grounding"),
-        "judge_D2_overclaiming": verdict.get("D2_overclaiming"),
-        "judge_D3_politeness_nonstereotype": verdict.get("D3_politeness_nonstereotype"),
-        "judge_D4_clarity_usefulness": verdict.get("D4_clarity_usefulness"),
-        "judge_rationale0": verdict.get("rationale0"),
-        "judge_rationale1": verdict.get("rationale1"),
-        "judge_rationale2": verdict.get("rationale2"),
-        "judge_flags": json.dumps(verdict.get("flags", []), ensure_ascii=False),
-        "inference_raw": json.dumps(inference.raw_response, ensure_ascii=False),
-        "judge_raw": json.dumps(judge.raw_response, ensure_ascii=False),
-}
+        )
+        row[f"judge_{i}_D1_visual_grounding"] = verdict.get("D1_visual_grounding")
+        row[f"judge_{i}_D2_overclaiming"] = verdict.get("D2_overclaiming")
+        row[f"judge_{i}_D3_politeness_nonstereotype"] = verdict.get(
+            "D3_politeness_nonstereotype"
+        )
+        row[f"judge_{i}_D4_clarity_usefulness"] = verdict.get("D4_clarity_usefulness")
+        row[f"judge_{i}_rationale0"] = verdict.get("rationale0")
+        row[f"judge_{i}_rationale1"] = verdict.get("rationale1")
+        row[f"judge_{i}_rationale2"] = verdict.get("rationale2")
+        row[f"judge_{i}_flags"] = json.dumps(
+            verdict.get("flags", []), ensure_ascii=False
+        )
+
+    # Add all inference raw responses
+    for i, inference in enumerate(inferences, start=1):
+        row[f"inference_raw_{i}"] = json.dumps(
+            inference.raw_response, ensure_ascii=False
+        )
+
+    # Add all judge raw responses
+    for i, judge in enumerate(judges, start=1):
+        row[f"judge_raw_{i}"] = json.dumps(judge.raw_response, ensure_ascii=False)
+
+    return row
+
 
 # ----------------------------- Runner ------------------------------------------
 
@@ -526,7 +668,8 @@ def run_pipeline(args: argparse.Namespace) -> None:
             for language in LANGUAGE_ORDER:
                 question = question_map[language]
                 for image_path in scenario_images:
-                    inference_result = call_inference(
+                    # Call inference model multiple times (default: 20)
+                    inference_results = call_inference_multiple(
                         client,
                         model=args.inference_model,
                         system_prompt=inference_system_prompt,
@@ -534,30 +677,37 @@ def run_pipeline(args: argparse.Namespace) -> None:
                         image_paths=[image_path],
                         max_output_tokens=args.inference_max_output_tokens,
                         retry_config=retry_config,
+                        num_inferences=args.num_inferences,
                     )
+
+                    # Call judge once per inference (1:1 mapping)
                     rubric_payload = rubric_cache[scenario.number]
-                    judge_result = call_judge(
-                        client,
-                        model=args.judge_model,
-                        system_prompt=judge_system_prompt,
-                        question=question,
-                        answer=inference_result.text,
-                        rubric=rubric_payload,
-                        max_output_tokens=args.judge_max_output_tokens,
-                        retry_config=retry_config,
-                    )
+                    judge_results = []
+                    for inference_result in inference_results:
+                        judge_result = call_judge(
+                            client,
+                            model=args.judge_model,
+                            system_prompt=judge_system_prompt,
+                            question=question,
+                            answer=inference_result.text,
+                            rubric=rubric_payload,
+                            max_output_tokens=args.judge_max_output_tokens,
+                            retry_config=retry_config,
+                        )
+                        judge_results.append(judge_result)
+                        if args.sleep_between_requests:
+                            time.sleep(args.sleep_between_requests)
+
                     writer.write_row(
                         result_row(
                             scenario,
                             language=language,
                             image_file=image_path.name,
                             question=question,
-                            inference=inference_result,
-                            judge=judge_result,
+                            inferences=inference_results,
+                            judges=judge_results,
                         )
                     )
-                    if args.sleep_between_requests:
-                        time.sleep(args.sleep_between_requests)
 
 
 # ----------------------------- CLI ---------------------------------------------
@@ -567,7 +717,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run scenario QA through OpenRouter inference and judge models.",
     )
-    parser.add_argument("--input-csv", default="Scenario_QA.csv", help="Path to Scenario_QA.csv")
+    parser.add_argument(
+        "--input-csv", default="Scenario_QA.csv", help="Path to Scenario_QA.csv"
+    )
     parser.add_argument(
         "--images-root",
         default="Images",
@@ -650,6 +802,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=float,
         default=1.0,
         help="Initial delay in seconds for exponential backoff on retries",
+    )
+    parser.add_argument(
+        "--num-inferences",
+        type=int,
+        default=20,
+        help="Number of inference calls to make per image (default: 20)",
     )
     return parser
 
